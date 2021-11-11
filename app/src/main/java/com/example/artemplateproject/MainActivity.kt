@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.example.arcorelab.common.helpers.CameraPermissionHelper
 import com.example.arcorelab.common.helpers.SessionManagerHelper
@@ -15,9 +16,12 @@ import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -67,6 +71,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             bear.setParent(anchorNode)
             bear.renderable= bearRenderable
             bear.select()
+            AddName(anchorNode,bear,"Я пишу- Медведь")
         }
         if(selected==2)
         {
@@ -74,6 +79,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             cat.setParent(anchorNode)
             cat.renderable= catRenderable
             cat.select()
+            AddName(anchorNode,cat,"Я пишу- Кошка")
         }
         if(selected==3)
         {
@@ -81,8 +87,28 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
             cow.setParent(anchorNode)
             cow.renderable= cowRenderable
             cow.select()
+            AddName(anchorNode,cow,"Я пишу- Корова")
         }
 
+    }
+
+    private fun AddName(anchorNode: AnchorNode, node: TransformableNode, name: String) {
+        ViewRenderable.builder().setView(this,R.layout.example_widget)
+            .build()
+            .thenAccept { viewRenderable ->
+                val nameView= TransformableNode(ArFragment.transformationSystem)
+                nameView.localPosition = Vector3(0f,node.localPosition.y+0.5f,0f)
+                nameView.setParent(anchorNode)
+                nameView.renderable=viewRenderable
+                nameView.select()
+
+                val textView=viewRenderable.view as View
+                var text= textView.findViewById<TextView>(R.id.exapmleText_id)
+                text.text = name
+                text.setOnClickListener{
+                    anchorNode.setParent(null)
+                }
+            }
     }
 
     /*
