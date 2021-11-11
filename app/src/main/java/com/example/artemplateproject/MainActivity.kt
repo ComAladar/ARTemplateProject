@@ -1,9 +1,12 @@
 package com.example.artemplateproject
 
+import android.graphics.Color
+import android.net.Uri
 import android.opengl.GLSurfaceView
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.arcorelab.common.helpers.CameraPermissionHelper
 import com.example.arcorelab.common.helpers.SessionManagerHelper
@@ -11,10 +14,14 @@ import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
+import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.ux.ArFragment
+import com.google.ar.sceneform.ux.TransformableNode
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MainActivity : AppCompatActivity(), GLSurfaceView.Renderer {
+class MainActivity : AppCompatActivity(),View.OnClickListener {
 
     var userARSetupRequest: Boolean = true
     var mSession: Session? = null
@@ -22,11 +29,153 @@ class MainActivity : AppCompatActivity(), GLSurfaceView.Renderer {
     val TAG: String = MainActivity::class.java.simpleName
 
 
+    lateinit var arrayView: Array<ImageView>
+    lateinit var bearRenderable:ModelRenderable
+    lateinit var catRenderable:ModelRenderable
+    lateinit var cowRenderable:ModelRenderable
+
+    internal var selected= 1 //bear
+
+    lateinit var ArFragment:ArFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupArray()
+        setupClickListener()
+        setupModel()
+        //26 Минута
+        ArFragment= supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
+        ArFragment.setOnTapArPlaneListener{hitResult,plane,motionEvent->
+            val anchor= hitResult.createAnchor()
+            val anchorNode= AnchorNode(anchor)
+            anchorNode.setParent(ArFragment.arSceneView.scene)
+
+            createModel(anchorNode,selected)
+        }
+
+
+
+    }
+
+    private fun createModel(anchorNode: AnchorNode, selected: Int) {
+        if(selected==1)
+        {
+            val bear=TransformableNode(ArFragment.transformationSystem)
+            bear.setParent(anchorNode)
+            bear.renderable= bearRenderable
+            bear.select()
+        }
+        if(selected==2)
+        {
+            val cat=TransformableNode(ArFragment.transformationSystem)
+            cat.setParent(anchorNode)
+            cat.renderable= catRenderable
+            cat.select()
+        }
+        if(selected==3)
+        {
+            val cow=TransformableNode(ArFragment.transformationSystem)
+            cow.setParent(anchorNode)
+            cow.renderable= cowRenderable
+            cow.select()
+        }
+
+    }
+
+    /*
+    private fun setupModel() {
+        ModelRenderable.builder()
+            .setSource(this, R.id.bear)
+            .build()
+            .thenAccept{modelRenderable -> bearRenderable=modelRenderable}
+            .exceptionally { throwable ->
+                Toast.makeText(this,"Unable to load bear model.",
+                    Toast.LENGTH_SHORT).show()
+                null
+              }
+        ModelRenderable.builder()
+            .setSource(this,R.id.cat)
+            .build()
+            .thenAccept{modelRenderable -> catRenderable=modelRenderable}
+            .exceptionally { throwable ->
+                Toast.makeText(this,"Unable to load cat model.",
+                    Toast.LENGTH_SHORT).show()
+                null
+            }
+        ModelRenderable.builder()
+            .setSource(this,R.id.cow)
+            .build()
+            .thenAccept{modelRenderable -> cowRenderable=modelRenderable}
+            .exceptionally { throwable ->
+                Toast.makeText(this,"Unable to load cow model.",
+                    Toast.LENGTH_SHORT).show()
+                null
+            }
+
+
+    }
+
+    private fun setupClickListener() {
+        for(i in arrayView.indices)
+        {
+            arrayView[i].setOnClickListener(this)
+        }
+    }
+
+     */
+    private fun setupModel() {
+        ModelRenderable.builder()
+            .setSource(this, Uri.parse("models/halloween.glb"))
+            .setIsFilamentGltf(true)
+            .build()
+            .thenAccept{modelRenderable -> bearRenderable=modelRenderable}
+            .exceptionally { throwable ->
+                Toast.makeText(this,"Unable to load bear model.",
+                    Toast.LENGTH_SHORT).show()
+                null
+            }
+        ModelRenderable.builder()
+            .setSource(this,Uri.parse("models/halloween.glb"))
+            .setIsFilamentGltf(true)
+            .build()
+            .thenAccept{modelRenderable -> catRenderable=modelRenderable}
+            .exceptionally { throwable ->
+                Toast.makeText(this,"Unable to load cat model.",
+                    Toast.LENGTH_SHORT).show()
+                null
+            }
+        ModelRenderable.builder()
+            .setSource(this,Uri.parse("models/halloween.glb"))
+            .setIsFilamentGltf(true)
+            .build()
+            .thenAccept{modelRenderable -> cowRenderable=modelRenderable}
+            .exceptionally { throwable ->
+                Toast.makeText(this,"Unable to load cow model.",
+                    Toast.LENGTH_SHORT).show()
+                null
+            }
+
+
+    }
+
+    private fun setupClickListener() {
+        for(i in arrayView.indices)
+        {
+            arrayView[i].setOnClickListener(this)
+        }
+    }
+
+
+
+    private fun setupArray() {
+        var bear=findViewById<ImageView>(R.id.bear)
+        var cat=findViewById<ImageView>(R.id.cat)
+        var cow=findViewById<ImageView>(R.id.cow)
+
+        arrayView= arrayOf(bear,cat,cow)
 
 
     }
@@ -43,23 +192,6 @@ class MainActivity : AppCompatActivity(), GLSurfaceView.Renderer {
         SessionOnPause()
 
 
-    }
-
-    fun onRadioButtonClicked(view: View)
-    {
-
-    }
-
-    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onDrawFrame(gl: GL10?) {
-        TODO("Not yet implemented")
     }
 
     fun SessionCameraChecker()
@@ -104,6 +236,37 @@ class MainActivity : AppCompatActivity(), GLSurfaceView.Renderer {
              */
             mSession!!.pause()
         }
+    }
+
+    override fun onClick(view: View?) {
+        if(view!!.id == R.id.bear)
+        {
+            selected=1
+            mySetBackground(view!!.id)
+        }
+        else if(view!!.id == R.id.cat)
+        {
+            selected=2
+            mySetBackground(view!!.id)
+        }
+        else if(view!!.id == R.id.cow)
+        {
+            selected=3
+            mySetBackground(view!!.id)
+        }
+
+
+    }
+
+    private fun mySetBackground(id: Int) {
+        for(i in arrayView.indices)
+        {
+            if(arrayView[i].id==id)
+                arrayView[i].setBackgroundColor(Color.parseColor("#80333639"))
+            else
+                arrayView[i].setBackgroundColor(Color.TRANSPARENT)
+        }
+
     }
 
 

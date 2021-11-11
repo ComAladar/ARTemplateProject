@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/arFragment"
+        android:id="@+id/scene_form_fragment"
         android:name="com.google.ar.sceneform.ux.ArFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -15,10 +15,12 @@
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/arFragment"
+        app:layout_constraintBottom_toTopOf="@+id/scene_form_fragment"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,80 +29,25 @@
 
             <ImageView
                 android:id="@+id/bear"
-                android:src="@drawable/bear"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content">
-            </ImageView>
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_foreground"></ImageView>
+
             <ImageView
                 android:id="@+id/cat"
-                android:src="@drawable/cat"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content">
-            </ImageView>
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_foreground"></ImageView>
+
             <ImageView
                 android:id="@+id/cow"
-                android:src="@drawable/cow"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content">
-            </ImageView>
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_foreground"></ImageView>
 
 
         </LinearLayout>
     </HorizontalScrollView>
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <RadioButton
-            android:id="@+id/radioViking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:checked="true"
-            android:onClick="onRadioButtonClicked"
-            android:text="ПЕРВАЯ" />
-
-        <RadioButton
-            android:id="@+id/radioCannon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:checked="false"
-            android:onClick="onRadioButtonClicked"
-            android:text="ВТОРАЯ" />
-
-        <RadioButton
-            android:id="@+id/radioTarget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:checked="false"
-            android:onClick="onRadioButtonClicked"
-            android:text="ТРЕТЬЯ" />
-
-    </RadioGroup>
-
-    <android.opengl.GLSurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
