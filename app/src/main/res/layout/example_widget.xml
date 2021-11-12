@@ -15,12 +15,14 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:text="Test"
-        android:textsize="40sp"
+        android:textSize="40sp"
         android:textColor="@color/black"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
