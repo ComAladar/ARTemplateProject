@@ -2,7 +2,6 @@ package com.example.artemplateproject
 
 import android.graphics.Color
 import android.net.Uri
-import android.opengl.GLSurfaceView
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,9 +20,6 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
-import java.util.*
-import javax.microedition.khronos.egl.EGLConfig
-import javax.microedition.khronos.opengles.GL10
 
 class MainActivity : AppCompatActivity(),View.OnClickListener {
 
@@ -38,7 +34,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     lateinit var catRenderable:ModelRenderable
     lateinit var cowRenderable:ModelRenderable
 
-    internal var selected= 1 //bear
+    internal var selected= 1 //bear text
 
     lateinit var ArFragment:ArFragment
 
@@ -50,7 +46,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
         setupArray()
         setupClickListener()
         setupModel()
-        //26 Минута
         ArFragment= supportFragmentManager.findFragmentById(R.id.scene_form_fragment) as ArFragment
         ArFragment.setOnTapArPlaneListener{hitResult,plane,motionEvent->
             val anchor= hitResult.createAnchor()
@@ -152,9 +147,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
     }
 
      */
+
     private fun setupModel() {
         ModelRenderable.builder()
-            .setSource(this, Uri.parse("models/halloween.glb"))
+            .setSource(this, Uri.parse("models/pencil.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> bearRenderable=modelRenderable}
@@ -164,7 +160,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 null
             }
         ModelRenderable.builder()
-            .setSource(this,Uri.parse("models/halloween.glb"))
+            .setSource(this,Uri.parse("models/pencil.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> catRenderable=modelRenderable}
@@ -174,7 +170,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener {
                 null
             }
         ModelRenderable.builder()
-            .setSource(this,Uri.parse("models/halloween.glb"))
+            .setSource(this,Uri.parse("models/pencil.glb"))
             .setIsFilamentGltf(true)
             .build()
             .thenAccept{modelRenderable -> cowRenderable=modelRenderable}
